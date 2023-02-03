@@ -132,3 +132,77 @@ function addRole() {
             })
         })
 }
+
+function addEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: 'Enter the first name of the employee you want to add:'
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: 'Enter the last name of the employee you want to add:'
+            },
+            {
+                type: 'input',
+                name: 'newRole',
+                message: 'Enter the new Employee role:'
+            },
+            {
+                type: 'input',
+                name: 'newManager',
+                message: 'Enter the manager: (Press Enter if Employee is a manager)'
+            },
+        ])
+        .then(answers => {
+            const { firstName, lastName, newRole, newManager } = answers;
+
+            let updateStatement = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${newRole}, ${newManager})`;
+
+            connection.query(updateStatement, (error, results) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(`Successfully created ${firstName} ${lastName} to role ID# ${newRole}`);
+                }
+            });
+            mainQuestion()
+        });
+}
+function updateEmployeeRole() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: 'Enter the first name of the employee you want to update:'
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: 'Enter the last name of the employee you want to update:'
+            },
+            {
+                type: 'input',
+                name: 'newRole',
+                message: 'Enter the new Employee role:'
+            },
+        ])
+        .then(answers => {
+            const { firstName, lastName, newRole } = answers;
+
+            let updateStatement = `UPDATE employee SET role_id = '${newRole}' WHERE first_name = '${firstName}' AND last_name = '${lastName}'`;
+
+            connection.query(updateStatement, (error, results) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(`Successfully updated ${firstName} ${lastName} to role ID# ${newRole}`);
+                }
+            });
+            mainQuestion()
+        });
+}
