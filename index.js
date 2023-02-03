@@ -85,3 +85,50 @@ function viewDeparments() {
     })
     mainQuestion()
 }
+
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'newDepartment',
+            message: "What is your new department's name?"
+        }
+    ])
+        .then(answer => {
+            console.log(answer);
+            connection.query(`INSERT INTO department (name) VALUES('${answer.newDepartment}')`, (err, data) => {
+
+                if (err) throw err;
+                console.log("New department added")
+                mainQuestion()
+            })
+        });
+};
+function addRole() {
+    console.log('Add role to role table')
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'What is the title for the new role?',
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary for this new role?',
+        },
+        {
+            type: 'input',
+            name: 'id',
+            message: 'What is the department id for this new role?',
+        }
+    ])
+        .then(answer => {
+            connect.query(`INSERT INTO role VALUES(id,'${answer.role}', ${answer.salary}, ${answer.id})`, (err, data) => {
+                if (err) throw err;
+                console.log('')
+                viewRoles()
+
+            })
+        })
+}
